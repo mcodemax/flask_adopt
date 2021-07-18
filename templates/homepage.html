@@ -7,7 +7,7 @@
 
 <ul>
     {% for pet in pets %}
-        <li><div>{{pet.name}}<br>{% if pet.available == True %}<b>Available</b>{% endif %}</div>
+        <li><div><a href="/{{pet.id}}">{{pet.name}}</a><br>{% if pet.available == True %}<b>Available</b>{% endif %}</div>
              {% if pet.photo_url %}<img src="{{pet.photo_url}}" alt="Image Gone">{% endif %}
              
         </li>
@@ -20,3 +20,4 @@
 </form>
 
 {% endblock %}
+

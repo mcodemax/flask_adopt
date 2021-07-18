@@ -1,6 +1,6 @@
 """Adoption Agency App"""
 
-from forms import AddPetForm
+from forms import AddPetForm, EditPetForm
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Pet
@@ -44,4 +44,27 @@ def add_pet():
     else:
         return render_template("add_pet.html", form=form)
 
-    
+@app.route('/<int:pet_id>', methods=["GET","POST"])
+def show_edit_pet_info(pet_id):
+    """"Edit a pet's info or adopt it"""
+    pet = Pet.query.get_or_404(pet_id)
+
+    form = EditPetForm()
+
+    if form.validate_on_submit():
+        
+        if form.photo_url.data:
+            pet.photo_url = form.photo_url.data
+        
+        if form.notes.data:
+            pet.notes = form.notes.data
+        
+        if form.available.data == True:
+            pet.available = True
+        else:
+            pet.available = False
+
+        db.session.commit()
+        return redirect("/")
+    else:
+        return render_template("pet_details.html", pet=pet, form=form)
